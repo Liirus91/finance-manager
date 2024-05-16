@@ -1,4 +1,5 @@
 import HeaderLogo from './header-logo';
+import Navigation from './navigation';
 
 const Header = () => {
   return (
@@ -7,6 +8,7 @@ const Header = () => {
         <div className="w-full flex justify-between items-center mb-14">
           <div className="flex items-center lg:gap-x-16">
             <HeaderLogo />
+            <Navigation />
           </div>
         </div>
       </div>
