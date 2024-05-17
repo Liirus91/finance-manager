@@ -1,7 +1,12 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import NavButton from './nav-button';
+import { useState } from 'react';
+import { useMedia } from 'react-use';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Button } from './ui/button';
+import { Menu } from 'lucide-react';
 
 const routes = [
   { href: '/', label: 'Overview' },
@@ -12,7 +17,46 @@ const routes = [
 ];
 
 const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
   const pathName = usePathname();
+  const isMobile = useMedia('(max-width: 1024px)', false);
+
+  const onClick = (href: string) => {
+    router.push(href);
+    setIsOpen(false);
+  };
+
+  if (isMobile) {
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger>
+          <Button
+            size="sm"
+            variant="outline"
+            className="font-normal bg-white/10 hover:bg-white/20 hover:text-white border-none focus-visible:ring-ofset-0 focus-visible:ring-transparent outline-none text-white focus:bg-white/30 transition"
+          >
+            <Menu className="size-4" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="px-2">
+          <nav className="flex flex-col pt-6 gap-y-2">
+            {routes.map((route) => (
+              <Button
+                key={route.href}
+                variant={route.href === pathName ? 'secondary' : 'ghost'}
+                onClick={() => onClick(route.href)}
+                className="w-full justify-start"
+              >
+                {route.label}
+              </Button>
+            ))}
+          </nav>
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   return (
     <nav className="hidden lg:flex items-center gap-x-2 overflow-x-auto">
