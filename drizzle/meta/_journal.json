@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1716196797771,
+      "tag": "0000_spooky_the_fallen",
+      "breakpoints": true
+    }
+  ]
+}
