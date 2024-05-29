@@ -14,6 +14,12 @@ const data: Payment[] = [
     status: 'pending',
     email: 'm@example.com',
   },
+  {
+    id: '722d52df',
+    amount: 50,
+    status: 'success',
+    email: 'asd@example.com',
+  },
 ];
 
 const AccountsPage = () => {
