@@ -8,11 +8,15 @@ import { columns } from './columns';
 import { DataTable } from '@/components/data-table';
 import { useGetAccounts } from '@/features/accounts/api/use-get-accounts';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useBulkDeleteAccounts } from '@/features/accounts/api/use-bulk-delete';
 
 const AccountsPage = () => {
   const newAccount = useNewAccount();
+  const deleteAccounts = useBulkDeleteAccounts();
   const accountsQuery = useGetAccounts();
   const accounts = accountsQuery.data || [];
+
+  const isDisabled = accountsQuery.isLoading || deleteAccounts.isPending;
 
   if (accountsQuery.isLoading) {
     return (
@@ -46,8 +50,11 @@ const AccountsPage = () => {
             columns={columns}
             data={accounts}
             filterKey="name"
-            onDelete={() => {}}
-            disabled={false}
+            onDelete={(row) => {
+              const ids = row.map((r) => r.original.id);
+              deleteAccounts.mutate({ ids });
+            }}
+            disabled={isDisabled}
           />
         </CardContent>
       </Card>
