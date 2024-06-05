@@ -15,6 +15,13 @@
       "when": 1716270945857,
       "tag": "0001_black_wrecker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1717569392775,
+      "tag": "0002_freezing_russian",
+      "breakpoints": true
     }
   ]
 }
