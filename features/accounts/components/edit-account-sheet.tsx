@@ -24,7 +24,7 @@ const EditAccountSheet = () => {
 
   const [ConfirmDialog, confirm] = useConfirm(
     'Are you sure?',
-    'Ypu are about to delete this transaction'
+    'You are about to delete this transaction.'
   );
 
   const accountQuery = useGetAccount(id);
