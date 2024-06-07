@@ -4,10 +4,10 @@ import { InferRequestType, InferResponseType } from 'hono';
 import { toast } from 'sonner';
 
 type ResponseType = InferResponseType<
-  (typeof client.api.accounts)['bulk-delete']['$post']
+  (typeof client.api.categories)['bulk-delete']['$post']
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.accounts)['bulk-delete']['$post']
+  (typeof client.api.categories)['bulk-delete']['$post']
 >['json'];
 
 export const useBulkDeleteCategories = () => {
