@@ -19,7 +19,7 @@ interface ActionsProps {
 export const Actions = ({ id }: ActionsProps) => {
   const [ConfirmDialog, confirm] = useConfirm(
     'Are you sure?',
-    'You are about to delete this transaction.'
+    'You are about to delete this category.'
   );
 
   const deleteMutation = useDeleteCategory(id);
