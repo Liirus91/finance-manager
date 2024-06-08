@@ -1,26 +1,12 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1716196797771,
-      "tag": "0000_spooky_the_fallen",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1716270945857,
-      "tag": "0001_black_wrecker",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1717569392775,
-      "tag": "0002_freezing_russian",
+      "version": "7",
+      "when": 1717823431979,
+      "tag": "0000_rare_james_howlett",
       "breakpoints": true
     }
   ]
