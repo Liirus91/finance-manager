@@ -1,26 +1,73 @@
 import { db } from '@/db/drizzle';
-import { categories, insertCategorySchema } from '@/db/schema';
+import {
+  transactions,
+  insertTransactionSchema,
+  accounts,
+  categories,
+} from '@/db/schema';
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
 import { zValidator } from '@hono/zod-validator';
 import { createId } from '@paralleldrive/cuid2';
-import { and, eq, inArray } from 'drizzle-orm';
+import { parse, subDays } from 'date-fns';
+import { and, desc, eq, gte, inArray, lte } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
 const app = new Hono()
-  .get('/', clerkMiddleware(), async (c) => {
-    const auth = getAuth(c);
+  .get(
+    '/',
+    zValidator(
+      'query',
+      z.object({
+        from: z.string().optional(),
+        to: z.string().optional(),
+        accountId: z.string().optional(),
+      })
+    ),
+    clerkMiddleware(),
+    async (c) => {
+      const auth = getAuth(c);
+      const { from, to, accountId } = c.req.valid('query');
 
-    if (!auth?.userId) {
-      return c.json({ error: 'Unautorized' }, 401);
+      if (!auth?.userId) {
+        return c.json({ error: 'Unautorized' }, 401);
+      }
+
+      const defaultTo = new Date();
+      const defaultFrom = subDays(defaultTo, 30);
+
+      const startDate = from
+        ? parse(from, 'yyyy-MM-dd', new Date())
+        : defaultFrom;
+      const endDate = to ? parse(to, 'yyyy-MM-dd', new Date()) : defaultTo;
+
+      const data = await db
+        .select({
+          id: transactions.id,
+          category: categories.name,
+          categoryId: transactions.category_id,
+          payee: transactions.payee,
+          amount: transactions.amount,
+          notes: transactions.notes,
+          account: accounts.name,
+          accountId: transactions.account_id,
+        })
+        .from(transactions)
+        .innerJoin(accounts, eq(transactions.account_id, accounts.id))
+        .leftJoin(categories, eq(transactions.category_id, categories.id))
+        .where(
+          and(
+            accountId ? eq(transactions.account_id, accountId) : undefined,
+            eq(accounts.userId, auth.userId),
+            gte(transactions.date, startDate),
+            lte(transactions.date, endDate)
+          )
+        )
+        .orderBy(desc(transactions.date));
+
+      return c.json({ data });
     }
-
-    const data = await db
-      .select({ id: categories.id, name: categories.name })
-      .from(categories)
-      .where(eq(categories.userId, auth.userId));
-    return c.json({ data });
-  })
+  )
   .get(
     '/:id',
     zValidator('param', z.object({ id: z.string().optional() })),
