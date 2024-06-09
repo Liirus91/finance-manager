@@ -109,7 +109,7 @@ const app = new Hono()
   .post(
     '/',
     clerkMiddleware(),
-    zValidator('json', insertCategorySchema.pick({ name: true })),
+    zValidator('json', insertTransactionSchema.omit({ id: true })),
     async (c) => {
       const auth = getAuth(c);
       const values = c.req.valid('json');
@@ -119,8 +119,8 @@ const app = new Hono()
       }
 
       const [data] = await db
-        .insert(categories)
-        .values({ id: createId(), userId: auth.userId, ...values })
+        .insert(transactions)
+        .values({ id: createId(), ...values })
         .returning();
       return c.json({ data });
     }
