@@ -44,6 +44,7 @@ const app = new Hono()
       const data = await db
         .select({
           id: transactions.id,
+          date: transactions.date,
           category: categories.name,
           categoryId: transactions.category_id,
           payee: transactions.payee,
@@ -85,9 +86,18 @@ const app = new Hono()
       }
 
       const [data] = await db
-        .select({ id: categories.id, name: categories.name })
-        .from(categories)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)));
+        .select({
+          id: transactions.id,
+          date: transactions.date,
+          categoryId: transactions.category_id,
+          payee: transactions.payee,
+          amount: transactions.amount,
+          notes: transactions.notes,
+          accountId: transactions.account_id,
+        })
+        .from(transactions)
+        .innerJoin(accounts, eq(transactions.account_id, accounts.id))
+        .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)));
 
       if (!data) {
         return c.json({ error: 'Not found' }, 404);
