@@ -155,7 +155,10 @@ const app = new Hono()
         .with(transactionsToDelete)
         .delete(transactions)
         .where(
-          inArray(transactions.id, sql`select id from ${transactionsToDelete}`)
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToDelete})`
+          )
         )
         .returning({ id: transactions.id });
 
@@ -166,7 +169,7 @@ const app = new Hono()
     '/:id',
     clerkMiddleware(),
     zValidator('param', z.object({ id: z.string().optional() })),
-    zValidator('json', insertCategorySchema.pick({ name: true })),
+    zValidator('json', insertTransactionSchema.omit({ id: true })),
     async (c) => {
       const auth = getAuth(c);
       const { id } = c.req.valid('param');
@@ -180,10 +183,24 @@ const app = new Hono()
         return c.json({ error: 'Unautorized' }, 401);
       }
 
+      const transactionsToUpdate = await db.$with('transactions_to_update').as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.account_id, accounts.id))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
+      );
+
       const [data] = await db
-        .update(categories)
+        .with(transactionsToUpdate)
+        .update(transactions)
         .set(values)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)))
+        .where(
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToUpdate})`
+          )
+        )
         .returning();
 
       if (!data) {
