@@ -226,10 +226,24 @@ const app = new Hono()
         return c.json({ error: 'Unautorized' }, 401);
       }
 
+      const transactionsToDelete = await db.$with('transactions_to_delete').as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.account_id, accounts.id))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
+      );
+
       const [data] = await db
-        .delete(categories)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)))
-        .returning({ id: categories.id });
+        .with(transactionsToDelete)
+        .delete(transactions)
+        .where(
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToDelete})`
+          )
+        )
+        .returning({ id: transactions.id });
 
       if (!data) {
         return c.json({ error: 'Not found' }, 404);
