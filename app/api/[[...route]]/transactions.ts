@@ -9,7 +9,7 @@ import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
 import { zValidator } from '@hono/zod-validator';
 import { createId } from '@paralleldrive/cuid2';
 import { parse, subDays } from 'date-fns';
-import { and, desc, eq, gte, inArray, lte } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
@@ -122,6 +122,7 @@ const app = new Hono()
         .insert(transactions)
         .values({ id: createId(), ...values })
         .returning();
+
       return c.json({ data });
     }
   )
@@ -137,15 +138,26 @@ const app = new Hono()
         return c.json({ error: 'Unautorized' }, 401);
       }
 
-      const data = await db
-        .delete(categories)
-        .where(
-          and(
-            eq(categories.userId, auth.userId),
-            inArray(categories.id, values.ids)
+      const transactionsToDelete = await db.$with('transactions_to_delete').as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.account_id, accounts.id))
+          .where(
+            and(
+              inArray(transactions.id, values.ids),
+              eq(accounts.userId, auth.userId)
+            )
           )
+      );
+
+      const data = await db
+        .with(transactionsToDelete)
+        .delete(transactions)
+        .where(
+          inArray(transactions.id, sql`select id from ${transactionsToDelete}`)
         )
-        .returning({ id: categories.id });
+        .returning({ id: transactions.id });
 
       return c.json({ data });
     }
