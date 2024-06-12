@@ -7,31 +7,49 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { insertAccountSchema } from '@/db/schema';
+import { insertTransactionSchema } from '@/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const formSchema = insertAccountSchema.pick({ name: true });
+const formSchema = z.object({
+  data: z.coerce.date(),
+  accountId: z.string(),
+  categoryId: z.string().nullable().optional(),
+  payee: z.string(),
+  amount: z.string(),
+  notes: z.string().nullable().optional(),
+});
+
+const apiSchema = insertTransactionSchema.omit({ id: true });
 
 type FormValues = z.input<typeof formSchema>;
+type ApiFormValues = z.input<typeof apiSchema>;
 
-interface AccountFormProps {
+interface TransactionFormProps {
   id?: string;
   defaultValues?: FormValues;
-  onSubmit: (values: FormValues) => void;
+  onSubmit: (values: ApiFormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  categoryOptions: { label: string; value: string }[];
+  accountOptions: { label: string; value: string }[];
+  onCreateCategory: (name: string) => void;
+  onCreateAccount: (name: string) => void;
 }
 
-export const AccountForm = ({
+export const TransactionForm = ({
   id,
   defaultValues,
   onSubmit,
   onDelete,
   disabled,
-}: AccountFormProps) => {
+  categoryOptions,
+  accountOptions,
+  onCreateCategory,
+  onCreateAccount,
+}: TransactionFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
