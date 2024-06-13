@@ -1,3 +1,4 @@
+import { Select } from '@/components/select';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -56,7 +57,7 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    onSubmit(values);
+    console.log(values);
   };
 
   const handleDelete = () => {
@@ -70,16 +71,38 @@ export const TransactionForm = ({
         className="space-y-4 pt-4"
       >
         <FormField
-          name="name"
+          name="accountId"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Account</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder="Select an account"
+                  options={accountOptions}
+                  onCreacte={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
                   disabled={disabled}
-                  placeholder="e.g. Cash, Bank, Credit card"
-                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="categoryId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder="Select a category"
+                  options={categoryOptions}
+                  onCreacte={onCreateCategory}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
                 />
               </FormControl>
             </FormItem>
