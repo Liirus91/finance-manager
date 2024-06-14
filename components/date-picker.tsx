@@ -10,7 +10,7 @@ import { Calendar } from './ui/calendar';
 interface DatePickerProps {
   value?: Date;
   onChange?: SelectSingleEventHandler;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const DatePicker = ({ value, onChange, disabled }: DatePickerProps) => {
