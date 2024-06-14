@@ -9,6 +9,7 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { insertTransactionSchema } from '@/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react';
@@ -135,6 +136,23 @@ export const TransactionForm = ({
                   placeholder="Add a payee"
                   disabled={disabled}
                   {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="notes"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Optional notes"
+                  disabled={disabled}
+                  value={field.value ?? ''}
                 />
               </FormControl>
             </FormItem>
