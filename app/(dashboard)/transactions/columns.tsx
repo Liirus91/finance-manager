@@ -8,6 +8,7 @@ import { InferResponseType } from 'hono';
 import { ArrowUpDown } from 'lucide-react';
 import { Actions } from './actions';
 import { format } from 'date-fns';
+import { formatCurrency } from '@/lib/utils';
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
@@ -103,7 +104,7 @@ export const columns: ColumnDef<ResponseType>[] = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('amount'));
 
-      return <span>{}</span>;
+      return <span>{formatCurrency(amount)}</span>;
     },
   },
   {
