@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { insertTransactionSchema } from '@/db/schema';
+import { convertAmountToMiliunits } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -60,7 +61,9 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    console.log(values);
+    const amount = parseFloat(values.amount);
+    const amountInMiliunits = convertAmountToMiliunits(amount);
+    onSubmit({ ...values, amount: amountInMiliunits });
   };
 
   const handleDelete = () => {
@@ -176,7 +179,7 @@ export const TransactionForm = ({
           )}
         />
         <Button className="w-full" disabled={disabled}>
-          {id ? 'Save changes' : 'Create account'}
+          {id ? 'Save changes' : 'Create transaction'}
         </Button>
         {!!id && (
           <Button
@@ -187,7 +190,7 @@ export const TransactionForm = ({
             onClick={handleDelete}
           >
             <Trash className="size-4 mr-2" />
-            Delete account
+            Delete transaction
           </Button>
         )}
       </form>
