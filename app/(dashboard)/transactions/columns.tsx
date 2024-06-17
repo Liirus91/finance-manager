@@ -9,6 +9,7 @@ import { ArrowUpDown } from 'lucide-react';
 import { Actions } from './actions';
 import { format } from 'date-fns';
 import { formatCurrency } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
@@ -104,7 +105,14 @@ export const columns: ColumnDef<ResponseType>[] = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('amount'));
 
-      return <span>{formatCurrency(amount)}</span>;
+      return (
+        <Badge
+          variant={amount < 0 ? 'destructive' : 'default'}
+          className="text-xs font-medium px-3.5 py-2.5"
+        >
+          {formatCurrency(amount)}
+        </Badge>
+      );
     },
   },
   {
