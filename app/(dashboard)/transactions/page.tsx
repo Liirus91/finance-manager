@@ -9,8 +9,19 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useNewTransaction } from '@/features/transactions/hooks/use-new-transaction';
 import { useGetTransactions } from '@/features/transactions/api/use-get-transactions';
 import { useBulkDeleteTransactions } from '@/features/transactions/api/use-bulk-delete-transactions';
+import { useState } from 'react';
+import { UploadButton } from './upload-button';
+
+enum VARIANTS {
+  LIST = 'LIST',
+  IMPORT = 'IMPORT',
+}
+
+const INITIAL_IMPORT_RESULTS = { data: [], errors: [], meta: {} };
 
 const TransactionsPage = () => {
+  const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
+
   const newTransaction = useNewTransaction();
   const deleteTransactions = useBulkDeleteTransactions();
   const transactionsQuery = useGetTransactions();
@@ -18,6 +29,14 @@ const TransactionsPage = () => {
 
   const isDisabled =
     transactionsQuery.isLoading || deleteTransactions.isPending;
+
+  if (variant === VARIANTS.IMPORT) {
+    return (
+      <>
+        <div>Import</div>
+      </>
+    );
+  }
 
   if (transactionsQuery.isLoading) {
     return (
@@ -47,6 +66,7 @@ const TransactionsPage = () => {
             <Plus className="size-4 mr-2" />
             Add new
           </Button>
+          <UploadButton onUpload={() => {}} />
         </CardHeader>
         <CardContent>
           <DataTable
