@@ -11,6 +11,7 @@ import { useGetTransactions } from '@/features/transactions/api/use-get-transact
 import { useBulkDeleteTransactions } from '@/features/transactions/api/use-bulk-delete-transactions';
 import { useState } from 'react';
 import { UploadButton } from './upload-button';
+import { ImportCard } from './import-card';
 
 enum VARIANTS {
   LIST = 'LIST',
@@ -28,7 +29,7 @@ const TransactionsPage = () => {
     setVariant(VARIANTS.IMPORT);
   };
 
-  const onCalcelImport = () => {
+  const onCancelImport = () => {
     setImportResults(INITIAL_IMPORT_RESULTS);
     setVariant(VARIANTS.LIST);
   };
@@ -44,7 +45,11 @@ const TransactionsPage = () => {
   if (variant === VARIANTS.IMPORT) {
     return (
       <>
-        <div>Import</div>
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={() => {}}
+        />
       </>
     );
   }
