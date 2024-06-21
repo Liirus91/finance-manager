@@ -26,7 +26,13 @@ export const ImportTable = ({
         <TableHeader className="bg-muted">
           <TableRow>
             {headers.map((_item, index) => (
-              <TableHead key={index}>{index}</TableHead>
+              <TableHead key={index}>
+                <TableHeadSelect
+                  columnIndex={index}
+                  selectedColumns={selectedColumns}
+                  onTableHeadSelectChange={onTableHeadSelectChange}
+                />
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
