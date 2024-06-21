@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { TableHeadSelect } from './table-head-select';
 
 interface ImportTableProps {
   headers: string[];
@@ -30,7 +31,7 @@ export const ImportTable = ({
                 <TableHeadSelect
                   columnIndex={index}
                   selectedColumns={selectedColumns}
-                  onTableHeadSelectChange={onTableHeadSelectChange}
+                  onChange={onTableHeadSelectChange}
                 />
               </TableHead>
             ))}
