@@ -67,6 +67,7 @@ export const AmountInput = ({
         decimalScale={2}
         onValueChange={onChange}
         disabled={disabled}
+        decimalSeparator="."
       />
       <p className="text-xs text-muted-foreground mt-2">
         {isIncome && 'This will count as income'}
