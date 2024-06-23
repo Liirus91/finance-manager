@@ -12,6 +12,7 @@ import { useBulkDeleteTransactions } from '@/features/transactions/api/use-bulk-
 import { useState } from 'react';
 import { UploadButton } from './upload-button';
 import { ImportCard } from './import-card';
+import { transactions as transactionSchema } from '@/db/schema';
 
 enum VARIANTS {
   LIST = 'LIST',
@@ -43,13 +44,17 @@ const TransactionsPage = () => {
   const isDisabled =
     transactionsQuery.isLoading || deleteTransactions.isPending;
 
+  const onSubmitImport = async (
+    values: (typeof transactionSchema.$inferInsert)[]
+  ) => {};
+
   if (variant === VARIANTS.IMPORT) {
     return (
       <>
         <ImportCard
           data={importResults.data}
           onCancel={onCancelImport}
-          onSubmit={() => {}}
+          onSubmit={onSubmitImport}
         />
       </>
     );
