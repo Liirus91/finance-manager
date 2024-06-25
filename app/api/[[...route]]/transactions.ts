@@ -138,7 +138,7 @@ const app = new Hono()
         return c.json({ error: 'Unautorized' }, 401);
       }
 
-      const data = db
+      const data = await db
         .insert(transactions)
         .values(
           values.map((value) => ({
