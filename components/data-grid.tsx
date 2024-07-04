@@ -3,6 +3,8 @@
 import { useGetSummary } from '@/features/summary/api/use-get-summary';
 import { formatDateRange } from '@/lib/utils';
 import { useSearchParams } from 'next/navigation';
+import { FaPiggyBank } from 'react-icons/fa';
+import { DataCard } from './data-card';
 
 export const DataGrid = () => {
   const { data } = useGetSummary();
@@ -18,6 +20,9 @@ export const DataGrid = () => {
         title="Remaining"
         value={data?.remainingAmount}
         percentageChange={data?.incomeChange}
+        icon={FaPiggyBank}
+        variant="default"
+        dateRange={dateRangeLabel}
       />
     </div>
   );
