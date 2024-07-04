@@ -1,4 +1,4 @@
-import DataGrid from '@/components/data-grid';
+import { DataGrid } from '@/components/data-grid';
 
 export default function DashboardPage() {
   return (
