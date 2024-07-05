@@ -27,7 +27,7 @@ const iconVariants = cva('size-6', {
 });
 
 type BoxVariants = VariantProps<typeof boxVariants>;
-type IconVariants = VariantProps<typeof boxVariants>;
+type IconVariants = VariantProps<typeof iconVariants>;
 
 interface DataCardProps extends BoxVariants, IconVariants {
   icon: IconType;
