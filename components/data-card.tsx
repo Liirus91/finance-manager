@@ -1,8 +1,9 @@
 import { VariantProps, cva } from 'class-variance-authority';
 import { IconType } from 'react-icons';
-import { Card, CardHeader } from './ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { cn } from '@/lib/utils';
 
-const boxVariants = cva('rounded-md p-3', {
+const boxVariants = cva('shrink-0 rounded-md p-3', {
   variants: {
     variant: {
       default: 'bg-blue-500/20',
@@ -46,8 +47,18 @@ export const DataCard = ({
   percentageChange = 0,
 }: DataCardProps) => {
   return (
-    <Card>
-      <CardHeader> </CardHeader>
+    <Card className="border-none drop-shadow-sm">
+      <CardHeader className="flex flex-row justify-between items-center gap-x-4">
+        <div className="space-y-2">
+          <CardTitle className="text-2xl line-clamp-1">{title}</CardTitle>
+          <CardDescription className="line-clamp-1">
+            {dateRange}
+          </CardDescription>
+        </div>
+        <div className={cn(boxVariants({ variant }))}>
+          <Icon className={cn(iconVariants({ variant }))} />
+        </div>
+      </CardHeader>
     </Card>
   );
 };
