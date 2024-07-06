@@ -1,7 +1,14 @@
 import { VariantProps, cva } from 'class-variance-authority';
 import { IconType } from 'react-icons';
-import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { cn } from '@/lib/utils';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
+import { cn, formatCurrency } from '@/lib/utils';
+import { CountUp } from './count-up';
 
 const boxVariants = cva('shrink-0 rounded-md p-3', {
   variants: {
@@ -59,6 +66,18 @@ export const DataCard = ({
           <Icon className={cn(iconVariants({ variant }))} />
         </div>
       </CardHeader>
+      <CardContent>
+        <h1 className="font-bold text-2xl mb-2 line-clamp-1 break-all">
+          <CountUp
+            preserveValue
+            start={0}
+            end={value}
+            decimals={2}
+            decimalPlaces={2}
+            formattingFn={formatCurrency}
+          />
+        </h1>
+      </CardContent>
     </Card>
   );
 };
