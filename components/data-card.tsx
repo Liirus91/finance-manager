@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { cn, formatCurrency } from '@/lib/utils';
+import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { CountUp } from './count-up';
 
 const boxVariants = cva('shrink-0 rounded-md p-3', {
@@ -77,6 +77,7 @@ export const DataCard = ({
             formattingFn={formatCurrency}
           />
         </h1>
+        <p>{formatPercentage(percentageChange)}</p>
       </CardContent>
     </Card>
   );
