@@ -49,7 +49,7 @@ export const DataCard = ({
   icon: Icon,
   title,
   value = 0,
-  variant,
+  variant = 'default',
   dateRange,
   percentageChange = 0,
 }: DataCardProps) => {
