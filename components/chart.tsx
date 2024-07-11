@@ -1,5 +1,6 @@
 import { FileSearch } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { AreaVariant } from './area-variant';
 
 type Props = {
   data?: { date: string; income: number; expenses: number }[];
