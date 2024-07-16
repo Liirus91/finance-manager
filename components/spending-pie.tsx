@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { PieVariant } from './pie-variant';
 
 type Props = {
   data?: { name: string; value: number }[];
