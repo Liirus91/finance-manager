@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from './ui/select';
 import { PieVariant } from './pie-variant';
+import { RadarVariant } from './radar-variant';
 
 type Props = {
   data?: { name: string; value: number }[];
